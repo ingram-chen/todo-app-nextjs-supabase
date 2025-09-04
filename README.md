@@ -111,6 +111,7 @@ npm run dev
 
 - **`docs/SUPABASE_SQL_SETUP.md`** - Supabase SQL Editor 詳細操作指南
 - **`docs/VISUAL_SETUP_GUIDE.md`** - 視覺化設定指南（含截圖說明）
+- **`docs/VERCEL_DEPLOYMENT_GUIDE.md`** - Vercel 部署詳細指南
 - **`docs/SETUP_GUIDE.md`** - 完整設定教學
 - **`docs/SECURITY_BEST_PRACTICES.md`** - 安全性最佳實踐
 - **`docs/EXTENSION_GUIDE.md`** - 功能擴展指南

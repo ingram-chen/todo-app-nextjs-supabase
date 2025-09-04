@@ -93,34 +93,25 @@ npm run dev
 
 ## 3. 部署到 Vercel
 
-### 方法 1: 使用 Vercel CLI
-```bash
-# 安裝 Vercel CLI
-npm i -g vercel
+**詳細步驟請參考**: `docs/VERCEL_DEPLOYMENT_GUIDE.md`
 
-# 登入 Vercel
-vercel login
-
-# 部署專案
-vercel
-
-# 設定環境變數
-vercel env add NEXT_PUBLIC_SUPABASE_URL
-vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-# 重新部署
-vercel --prod
-```
-
-### 方法 2: 使用 Vercel Dashboard
-1. 推送程式碼到 GitHub
-2. 前往 [Vercel Dashboard](https://vercel.com/dashboard)
-3. 點擊 "New Project"
-4. 匯入你的 GitHub 專案
-5. 在 "Environment Variables" 中設定：
+### 快速版本：
+1. 前往 [Vercel Dashboard](https://vercel.com/dashboard)
+2. 點擊 "New Project" 匯入 GitHub Repository
+3. 設定環境變數：
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-6. 點擊 "Deploy"
+4. 點擊 "Deploy"
+
+### 使用 Vercel CLI（進階）
+```bash
+npm i -g vercel
+vercel login
+vercel
+vercel env add NEXT_PUBLIC_SUPABASE_URL
+vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY
+vercel --prod
+```
 
 ## 4. 測試應用程式
 
