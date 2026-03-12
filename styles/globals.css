@@ -1,47 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* 自訂樣式 */
+/* CSS Variables for design tokens */
 @layer base {
+  :root {
+    --color-primary: #3b82f6;
+    --color-primary-light: #60a5fa;
+    --color-primary-dark: #1d4ed8;
+    --color-secondary: #8b5cf6;
+    --color-accent: #06b6d4;
+    --color-success: #22c55e;
+    --color-warning: #eab308;
+    --color-error: #ef4444;
+    --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --shadow-card-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  }
+
   html {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    scroll-behavior: smooth;
   }
   
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 text-gray-900 min-h-screen;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.05) 0px, transparent 50%);
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full hover:bg-gray-400 transition-colors;
   }
 }
 
 @layer components {
-  /* 載入動畫 */
+  /* Enhanced loading spinner */
   .loading-spinner {
-    @apply animate-spin rounded-full border-2 border-gray-300 border-t-primary-600;
+    @apply animate-spin rounded-full border-2 border-gray-200 border-t-primary-600;
   }
-  
-  /* 按鈕樣式 */
+
+  /* Enhanced primary button */
   .btn-primary {
-    @apply bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors;
+    @apply px-5 py-2.5 rounded-xl font-medium text-white
+           bg-gradient-to-r from-primary-500 to-primary-600
+           hover:from-primary-600 hover:to-primary-700
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
+           shadow-md hover:shadow-lg
+           transition-all duration-200 ease-out
+           active:scale-95 disabled:scale-100;
   }
-  
+
+  /* Enhanced secondary button */
   .btn-secondary {
-    @apply bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors;
+    @apply px-5 py-2.5 rounded-xl font-medium text-gray-700
+           bg-white border border-gray-200
+           hover:bg-gray-50 hover:border-gray-300
+           focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2
+           shadow-sm hover:shadow-md
+           transition-all duration-200 ease-out
+           active:scale-95 disabled:scale-100;
   }
-  
-  /* 輸入框樣式 */
+
+  /* Enhanced input field */
   .input-field {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    @apply w-full px-4 py-3 rounded-xl border border-gray-200
+           bg-white text-gray-900
+           placeholder:text-gray-400
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500
+           focus:shadow-glow-primary
+           transition-all duration-200;
   }
-  
-  /* 卡片樣式 */
+
+  /* Enhanced card */
   .card {
-    @apply bg-white rounded-lg shadow-md p-6;
+    @apply bg-white/80 backdrop-blur-sm rounded-2xl shadow-card 
+           border border-white/50 p-6
+           transition-all duration-300;
+  }
+
+  /* Enhanced card with hover effect */
+  .card-hover {
+    @apply card hover:shadow-card-hover hover:-translate-y-1 
+           hover:border-primary-100;
+  }
+
+  /* Glass effect card */
+  .card-glass {
+    @apply bg-white/60 backdrop-blur-md rounded-2xl shadow-card 
+           border border-white/20 p-6;
+  }
+
+  /* Stat card */
+  .stat-card {
+    @apply relative overflow-hidden rounded-2xl p-5
+           transition-all duration-300 hover:scale-[1.02];
+  }
+
+  .stat-card::before {
+    content: '';
+    @apply absolute inset-0 opacity-10 rounded-2xl;
+    background: linear-gradient(135deg, currentColor 0%, transparent 70%);
+  }
+
+  /* Custom checkbox */
+  .checkbox-custom {
+    @apply w-6 h-6 rounded-lg border-2 flex items-center justify-center
+           transition-all duration-200 cursor-pointer
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+
+  .checkbox-custom:checked {
+    @apply bg-gradient-to-br from-success-400 to-success-500 border-success-500
+           shadow-glow-success;
+  }
+
+  /* Fade in animation container */
+  .animate-fade-in-up {
+    animation: fadeInUp 0.5s ease-out forwards;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
-/* 響應式設計 */
-@media (max-width: 640px) {
-  .container {
-    @apply px-4;
+/* Utility layer enhancements */
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-secondary-500;
+  }
+
+  .border-gradient {
+    border-image: linear-gradient(to right, #3b82f6, #8b5cf6) 1;
+  }
+
+  /* Stagger animation delays */
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+  .delay-500 { animation-delay: 500ms; }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Responsive container */
+@layer components {
+  .container-app {
+    @apply max-w-3xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 }
