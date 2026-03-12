@@ -1,8 +1,34 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
+import { motion, AnimatePresence } from 'framer-motion'
 import TaskForm from '../components/TaskForm'
 import TaskList from '../components/TaskList'
 import { taskService } from '../lib/supabase'
+
+// Animation variants for staggered entrance
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: 'spring',
+      stiffness: 100,
+      damping: 12
+    }
+  }
+}
 
 export default function Home() {
   const [tasks, setTasks] = useState([])
@@ -83,60 +109,109 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen relative">
+        {/* Decorative background blobs */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-200/30 rounded-full blur-3xl" />
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary-200/30 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-accent-100/20 rounded-full blur-3xl" />
+        </div>
+
         {/* 頁面標題 */}
-        <header className="bg-white shadow-sm border-b">
-          <div className="max-w-4xl mx-auto px-4 py-6">
+        <motion.header 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className="relative bg-white/70 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-50"
+        >
+          <div className="container-app py-6">
             <div className="text-center">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                📝 待辦清單 App
-              </h1>
-              <p className="text-gray-600">
-                使用 Next.js + Supabase 建立的簡單 CRUD 應用程式
-              </p>
+              <motion.h1 
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.4 }}
+                className="text-4xl sm:text-5xl font-extrabold mb-3"
+              >
+                <span className="text-gradient">📝 待辦清單</span>
+              </motion.h1>
+              <motion.p 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="text-gray-500 text-sm sm:text-base max-w-md mx-auto"
+              >
+                使用 <span className="font-semibold text-primary-600">Next.js</span> + <span className="font-semibold text-secondary-600">Supabase</span> 打造的精美待辦應用
+              </motion.p>
             </div>
           </div>
-        </header>
+        </motion.header>
 
         {/* 主要內容 */}
-        <main className="max-w-4xl mx-auto px-4 py-8">
+        <motion.main 
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="relative container-app py-8"
+        >
           {/* 新增任務表單 */}
-          <TaskForm 
-            onAddTask={handleAddTask} 
-            loading={actionLoading} 
-          />
+          <motion.div variants={itemVariants}>
+            <TaskForm 
+              onAddTask={handleAddTask} 
+              loading={actionLoading} 
+            />
+          </motion.div>
 
           {/* 任務列表 */}
-          <TaskList
-            tasks={tasks}
-            onUpdateTask={handleUpdateTask}
-            onDeleteTask={handleDeleteTask}
-            loading={loading}
-          />
+          <motion.div variants={itemVariants}>
+            <TaskList
+              tasks={tasks}
+              onUpdateTask={handleUpdateTask}
+              onDeleteTask={handleDeleteTask}
+              loading={loading}
+            />
+          </motion.div>
 
           {/* 重新載入按鈕 */}
-          <div className="mt-8 text-center">
-            <button
+          <motion.div 
+            variants={itemVariants}
+            className="mt-8 text-center"
+          >
+            <motion.button
               onClick={loadTasks}
               disabled={loading}
-              className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="btn-secondary inline-flex items-center gap-2"
             >
-              {loading ? '載入中...' : '🔄 重新載入'}
-            </button>
-          </div>
-        </main>
+              <svg 
+                className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              {loading ? '載入中...' : '重新載入'}
+            </motion.button>
+          </motion.div>
+        </motion.main>
 
         {/* 頁尾 */}
-        <footer className="bg-white border-t mt-16">
-          <div className="max-w-4xl mx-auto px-4 py-6 text-center text-gray-600">
-            <p>
-              使用 <span className="font-semibold">Next.js</span> + <span className="font-semibold">Supabase</span> 建立
+        <motion.footer 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="relative bg-white/50 backdrop-blur-sm border-t border-white/20 mt-16"
+        >
+          <div className="container-app py-6 text-center">
+            <p className="text-gray-500 text-sm">
+              Powered by <span className="font-semibold text-primary-600">Next.js</span> + <span className="font-semibold text-secondary-600">Supabase</span>
             </p>
-            <p className="text-sm mt-2">
+            <p className="text-gray-400 text-xs mt-2">
               支援 CRUD 操作：新增、讀取、更新、刪除任務
             </p>
           </div>
-        </footer>
+        </motion.footer>
       </div>
     </>
   )
